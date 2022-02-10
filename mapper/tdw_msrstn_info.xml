@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mappingInfos id="airkorea">
+    <topNodes>
+        <nodes>
+            <type>airkorea</type>
+            <values>
+                <column>dmX</column>
+                <property>dmX</property>
+                <table>tdw_msrstn_info</table>
+            </values>
+            <values>
+                <column>mangName</column>
+                <property>mangName</property>
+                <table>tdw_msrstn_info</table>
+            </values>
+            <values>
+                <column>year</column>
+                <property>year</property>
+                <table>tdw_msrstn_info</table>
+            </values>
+            <values>
+                <column>addr</column>
+                <property>addr</property>
+                <table>tdw_msrstn_info</table>
+            </values>
+            <values>
+                <column>stationName</column>
+                <property>stationName</property>
+                <table>tdw_msrstn_info</table>
+            </values>
+            <values>
+                <column>dmY</column>
+                <property>dmY</property>
+                <table>tdw_msrstn_info</table>
+            </values>
+        </nodes>
+
+    </topNodes>
+</mappingInfos>
