@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.hwj.practice.model.Api;
 import net.hwj.practice.model.ApiInterface;
 import net.hwj.practice.model.airkorea.Tdw_Msrstn_Info;
+import net.hwj.practice.model.airkorea.Tdw_arpltn_msrstn_rltm_mesure_info;
+import net.hwj.practice.model.airkorea.Tdw_arpltn_stats_msrstn_rltm_daly_avrg_info;
+import net.hwj.practice.model.airkorea.Tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info;
 import net.hwj.practice.repository.ApiRepository;
 import net.hwj.practice.service.AirKoreaService;
 import net.hwj.practice.service.ApiService;
@@ -50,8 +53,6 @@ public class AirKoreaController {
             JsonObject result = airKoreaService.getJsonResult(api.getURL(),page,perPage,offset);
             int totalcount = airKoreaService.getTotal(result);
             JsonArray items = airKoreaService.getItems(result);
-            log.info("result : " + result);
-            log.info("totalcount : " + totalcount);
 
             if(items.size() > 0){
                 for(int i=0; i < items.size(); i++ ){
@@ -60,13 +61,6 @@ public class AirKoreaController {
                     tdwMsrstnInfoList.add(tdw_msrstn_info);
                     count ++;
                 }
-/**** ITEMS 한꺼번에 가져오는 방법 ****/
-//                List<Tdw_Msrstn_Info> tdw_msrstn_infos = (List<Tdw_Msrstn_Info>) getList(jsonitem,Tdw_Msrstn_Info.class);
-//                tdw_msrstn_infos.forEach(tdw_msrstn_info -> {
-//                    tdwMsrstnInfoList.add(tdw_msrstn_info);
-//                });
-//                log.info("SIZE : " + tdw_msrstn_infos.size());
-//                count = count + tdw_msrstn_infos.size();
             }
             if(count == totalcount){
                 break;
@@ -78,15 +72,150 @@ public class AirKoreaController {
         return tdwMsrstnInfoList;
     }
 
+    @GetMapping(value = "/tdw_arpltn_msrstn_rltm_mesure_info", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<Tdw_arpltn_msrstn_rltm_mesure_info> tdw_arpltn_msrstn_rltm_mesure_info() throws IOException {
+        final String tb_nm = "tdw_arpltn_msrstn_rltm_mesure_info";
+        int offset = 1;
+        int count = 0;
+        String page = "pageNo";
+        String perPage = "numofRows";
+        List<Tdw_arpltn_msrstn_rltm_mesure_info> tdw_arpltn_msrstn_rltm_mesure_info_list =  new ArrayList<>();
+        //Api api = apiRepository.findOneByTbnm(tb_nm);
+        List<Api> apiList = apiRepository.findAllByTbnm(tb_nm);
+
+        if(apiList.size() > 0 ){
+            for(int i=0; i<apiList.size(); i++){
+                offset = 1;
+                count = 0;
+                while(true) {
+                    JsonObject result = airKoreaService.getJsonResult(apiList.get(i).getURL(),page,perPage,offset);
+                    int totalcount = airKoreaService.getTotal(result);
+                    JsonArray items = airKoreaService.getItems(result);
+
+                    if(items.size() > 0){
+                        for(int j=0; j < items.size(); j++ ){
+                            Tdw_arpltn_msrstn_rltm_mesure_info tdw_arpltn_msrstn_rltm_mesure_info = createObject(items.get(j).getAsJsonObject().toString(),Tdw_arpltn_msrstn_rltm_mesure_info.class);
+                            tdw_arpltn_msrstn_rltm_mesure_info_list.add(tdw_arpltn_msrstn_rltm_mesure_info);
+                            count ++;
+                        }
+                    }
+                    if(count == totalcount){
+                        log.info("total : " + totalcount);
+                        break;
+                    }
+                    else {
+                        offset ++;
+                    }
+                }
+            }
+
+        }
+
+        return tdw_arpltn_msrstn_rltm_mesure_info_list;
+    }
+
+
+    @GetMapping(value = "/tdw_arpltn_stats_msrstn_rltm_daly_avrg_info", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<Tdw_arpltn_stats_msrstn_rltm_daly_avrg_info> tdw_arpltn_stats_msrstn_rltm_daly_avrg_info() throws IOException{
+        final String tb_nm = "tdw_arpltn_stats_msrstn_rltm_daly_avrg_info";
+        int offset = 1;
+        int count = 0;
+        String page = "pageNo";
+        String perPage = "numofRows";
+        String inqBginDt = airKoreaService.getYesterday();
+        String inqEndDt = inqBginDt;
+        String todayParameter = airKoreaService.makeDayParameter(inqBginDt,inqEndDt);
+        List<Tdw_arpltn_stats_msrstn_rltm_daly_avrg_info> tdw_arpltn_stats_msrstn_rltm_daly_avrg_info_list =  new ArrayList<>();
+
+        List<Api> apiList = apiRepository.findAllByTbnm(tb_nm);
+
+        if(apiList.size() > 0 ){
+            for(int i=0; i<apiList.size(); i++){
+                offset = 1;
+                count = 0;
+                while(true) {
+                    JsonObject result = airKoreaService.getJsonResult(apiList.get(i).getURL()+todayParameter,page,perPage,offset);
+                    int totalcount = airKoreaService.getTotal(result);
+                    JsonArray items = airKoreaService.getItems(result);
+
+                    if(items.size() > 0){
+                        for(int j=0; j < items.size(); j++ ){
+                            Tdw_arpltn_stats_msrstn_rltm_daly_avrg_info tdw_arpltn_stats_msrstn_rltm_daly_avrg_info
+                                    = createObject(items.get(j).getAsJsonObject().toString(),
+                                      Tdw_arpltn_stats_msrstn_rltm_daly_avrg_info.class);
+                            tdw_arpltn_stats_msrstn_rltm_daly_avrg_info_list.add(tdw_arpltn_stats_msrstn_rltm_daly_avrg_info);
+                            count ++;
+                        }
+                    }
+                    if(count == totalcount){
+                        log.info("total : " + totalcount);
+                        break;
+                    }
+                    else {
+                        offset ++;
+                    }
+                }
+            }
+        }
+        return tdw_arpltn_stats_msrstn_rltm_daly_avrg_info_list;
+    }
+
+    @GetMapping(value = "/tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<Tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info> tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info() throws IOException{
+        final String tb_nm = "tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info";
+        int offset = 1;
+        int count = 0;
+        String page = "pageNo";
+        String perPage = "numofRows";
+        String inqBginMm = airKoreaService.getBeforeMonth();
+        String inqEndMm = inqBginMm;
+        String monthParameter = airKoreaService.makeMonthParameter(inqBginMm,inqEndMm);
+        List<Tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info> tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info_list =  new ArrayList<>();
+
+        List<Api> apiList = apiRepository.findAllByTbnm(tb_nm);
+
+        if(apiList.size() > 0 ){
+            for(int i=0; i<apiList.size(); i++){
+                offset = 1;
+                count = 0;
+                while(true) {
+                    JsonObject result = airKoreaService.getJsonResult(apiList.get(i).getURL()+monthParameter,page,perPage,offset);
+                    int totalcount = airKoreaService.getTotal(result);
+                    JsonArray items = airKoreaService.getItems(result);
+
+                    if(items.size() > 0){
+                        for(int j=0; j < items.size(); j++ ){
+                            Tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info
+                                    = createObject(items.get(j).getAsJsonObject().toString(),
+                                    Tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info.class);
+                            tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info_list.add(tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info);
+                            count ++;
+                        }
+                    }
+                    if(count == totalcount){
+                        log.info("total : " + totalcount);
+                        break;
+                    }
+                    else {
+                        offset ++;
+                    }
+                }
+            }
+        }
+        return tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info_list;
+    }
+
+
     public <T> T createObject(String jsonitem, Class<T> clazz){
         Gson gson = new Gson();
         return gson.fromJson(jsonitem, clazz);
 
     }
-    public <T> T getList(String jsonArray, Class<T> clazz){
 
-        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
-        return new Gson().fromJson(jsonArray, typeOfT);
-    }
+//    public <T> T getList(String jsonArray, Class<T> clazz){
+//
+//        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
+//        return new Gson().fromJson(jsonArray, typeOfT);
+//    }
 
 }

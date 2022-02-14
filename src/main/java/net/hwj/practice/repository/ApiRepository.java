@@ -17,4 +17,6 @@ public interface ApiRepository extends JpaRepository<Api,String> , JpaSpecificat
 //    @Query
 //    List<String> findUrlByTb_nm(String tb_nm);
 
+    List<Api> findAllByTbnm(String tb_nm);
+
 }
