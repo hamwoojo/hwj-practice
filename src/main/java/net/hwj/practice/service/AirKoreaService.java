@@ -36,6 +36,19 @@ public class AirKoreaService {
 
     }
 
+    public JsonObject getJsonResult(String url) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append(url);
+
+        log.info(sb.toString());
+
+        ResponseBody responseBody = apiInterface.getUrl(sb.toString()).execute().body();
+        String jsonString = responseBody.string();
+        JsonObject jsonResult = new JsonParser().parse(jsonString).getAsJsonObject();
+        return jsonResult;
+
+    }
+
     public int getTotal(JsonObject result) {
         return result.get("response").getAsJsonObject().get("body").getAsJsonObject().get("totalCount").getAsInt();
     }

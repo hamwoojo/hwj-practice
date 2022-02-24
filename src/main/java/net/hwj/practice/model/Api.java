@@ -45,4 +45,5 @@ public class Api {
     @Column(name = "tb_nm")
     private String tbnm;
 
+
 }

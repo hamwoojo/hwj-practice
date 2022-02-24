@@ -1,12 +1,12 @@
-package net.hwj.practice.model.airkorea;
+package net.hwj.practice.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info {
-    private String msurMm;
+public class Tdw_arpltn_stats_msrstn_rltm_daly_avrg_info {
+    private String msurDt;
     private String msrstnName;
     private Float so2Value;
     private Float coValue;

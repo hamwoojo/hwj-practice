@@ -2,14 +2,10 @@ package net.hwj.practice.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.hwj.practice.model.Api;
-import net.hwj.practice.model.ApiVo;
+import net.hwj.practice.VO.ApiVo;
 import net.hwj.practice.repository.ApiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.http.*;
 
 @Slf4j
 @Service

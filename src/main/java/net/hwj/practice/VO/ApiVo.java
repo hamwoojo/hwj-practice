@@ -1,4 +1,4 @@
-package net.hwj.practice.model;
+package net.hwj.practice.VO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiVo {
-
 
     private String url;
     private String api_key;

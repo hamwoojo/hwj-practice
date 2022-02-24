@@ -1,5 +1,6 @@
-package net.hwj.practice.model.DataDream;
+package net.hwj.practice.model;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,8 +42,5 @@ public class Tdw_gg_relif_sttus {
     private String GOUT_TM;
     private String ONSPOT_ARVL_YMD;
     private String SUM_YY;
-
-
-
 
 }

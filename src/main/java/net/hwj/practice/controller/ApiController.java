@@ -3,9 +3,8 @@ package net.hwj.practice.controller;//package net.hwj.practice.controller;
 
 import lombok.extern.slf4j.Slf4j;
 
-import net.hwj.practice.dto.model.api.ApiResult;
 import net.hwj.practice.model.Api;
-import net.hwj.practice.model.ApiVo;
+import net.hwj.practice.VO.ApiVo;
 import net.hwj.practice.repository.ApiRepository;
 import net.hwj.practice.repository.NifiRepository;
 

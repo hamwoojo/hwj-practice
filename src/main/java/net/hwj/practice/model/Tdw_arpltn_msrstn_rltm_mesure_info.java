@@ -1,4 +1,4 @@
-package net.hwj.practice.model.airkorea;
+package net.hwj.practice.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,6 @@ import lombok.Setter;
 //에어코리아_측정소_정보
 public class Tdw_arpltn_msrstn_rltm_mesure_info {
 
-    private String meusedate;
     private String dataTime;
     private String mangName;
     private String so2Value;

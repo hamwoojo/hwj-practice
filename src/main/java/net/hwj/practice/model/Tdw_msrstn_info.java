@@ -1,4 +1,4 @@
-package net.hwj.practice.model.airkorea;
+package net.hwj.practice.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import java.math.BigInteger;
 //@Entity
 //@Table(name="tdw_msrstn_info")
 //에어코리아_측정소_정보
-public class Tdw_Msrstn_Info {
+public class Tdw_msrstn_info {
 
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)

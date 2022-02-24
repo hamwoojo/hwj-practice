@@ -1,6 +1,7 @@
 package net.hwj.practice.service;
 
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class DatadreamService {
+public class DatadreamService implements CommonInterface{
     @Autowired
     ApiRepository apiRepository;
     @Autowired
@@ -34,6 +35,36 @@ public class DatadreamService {
         JsonObject jsonResult = new JsonParser().parse(jsonString).getAsJsonObject();
         return jsonResult;
 
+    }
+
+    @Override
+    public <T> T createObject(String jsonitem, Class<T> clazz) {
+        return new Gson().fromJson(jsonitem,clazz);
+    }
+
+    @Override
+    public JsonObject getJsonResult(String url, String page, String perPage, int offset) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append(url);
+        sb.append("&").append("pIndex").append("=").append(page);
+        sb.append("&").append("pSize").append("=").append(perPage);
+        log.info(sb.toString());
+
+        ResponseBody responseBody = apiInterface.getUrl(sb.toString()).execute().body();
+        String jsonString = responseBody.string();
+        JsonObject jsonResult = new JsonParser().parse(jsonString).getAsJsonObject();
+        return jsonResult;
+    }
+
+    @Override
+    public JsonObject getJsonResult(String url) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append(url);
+
+        ResponseBody responseBody = apiInterface.getUrl(sb.toString()).execute().body();
+        String jsonString = responseBody.string();
+        JsonObject jsonResult = new JsonParser().parse(jsonString).getAsJsonObject();
+        return jsonResult;
     }
 
     public int getTotal(JsonObject result) {

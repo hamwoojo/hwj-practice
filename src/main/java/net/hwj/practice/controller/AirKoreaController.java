@@ -1,25 +1,16 @@
 package net.hwj.practice.controller;
 
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import lombok.extern.slf4j.Slf4j;
-import net.hwj.practice.model.Api;
-import net.hwj.practice.model.ApiInterface;
-import net.hwj.practice.model.airkorea.Tdw_Msrstn_Info;
-import net.hwj.practice.model.airkorea.Tdw_arpltn_msrstn_rltm_mesure_info;
-import net.hwj.practice.model.airkorea.Tdw_arpltn_stats_msrstn_rltm_daly_avrg_info;
-import net.hwj.practice.model.airkorea.Tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info;
+import net.hwj.practice.model.*;
 import net.hwj.practice.repository.ApiRepository;
+import net.hwj.practice.repository.TnDataBassInfoRepository;
 import net.hwj.practice.service.AirKoreaService;
 import net.hwj.practice.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.lang.reflect.Type;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,34 +20,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/airkorea")
 @CrossOrigin
-public class AirKoreaController {
+public class AirKoreaController extends CommonController{
     @Autowired
-    ApiService apiService;
-    @Autowired
-    ApiRepository apiRepository;
+    TnDataBassInfoRepository tnDataBassInfoRepository;
+
     @Autowired
     ApiInterface apiInterface;
     @Autowired
     AirKoreaService airKoreaService;
 
     @GetMapping(value = "/tdw_msrstn_info", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<Tdw_Msrstn_Info> tdw_msrstn_info() throws IOException {
+    public List<Tdw_msrstn_info> tdw_msrstn_info() throws IOException {
         final String tb_nm = "tdw_msrstn_info";
         int offset = 1;
         int count = 0;
         String page = "pageNo";
         String perPage = "numofRows";
-        List<Tdw_Msrstn_Info> tdwMsrstnInfoList = new ArrayList<>();
-        Api api = apiRepository.findOneByTbnm(tb_nm);
-        log.info(api.getURL());
+        List<Tdw_msrstn_info> tdwMsrstnInfoList = new ArrayList<>();
+        Tn_data_bass_info tn_data_bass_info = tnDataBassInfoRepository.findOneByInnerClctTblPhysiclNm(tb_nm);
+        log.info(tn_data_bass_info.getData_link_url());
         while(true) {
-            JsonObject result = airKoreaService.getJsonResult(api.getURL(),page,perPage,offset);
+            JsonObject result = airKoreaService.getJsonResult(tn_data_bass_info.getData_link_url(),page,perPage,offset);
             int totalcount = airKoreaService.getTotal(result);
             JsonArray items = airKoreaService.getItems(result);
 
             if(items.size() > 0){
                 for(int i=0; i < items.size(); i++ ){
-                    Tdw_Msrstn_Info tdw_msrstn_info = createObject(items.get(i).getAsJsonObject().toString(),Tdw_Msrstn_Info.class);
+                    Tdw_msrstn_info tdw_msrstn_info = createObject(items.get(i).getAsJsonObject().toString(), Tdw_msrstn_info.class);
                     //Tdw_Msrstn_Info tdw_msrstn_info = gson.fromJson(items.get(i).getAsJsonObject().toString(),Tdw_Msrstn_Info.class);
                     tdwMsrstnInfoList.add(tdw_msrstn_info);
                     count ++;
@@ -81,20 +71,20 @@ public class AirKoreaController {
         String perPage = "numofRows";
         List<Tdw_arpltn_msrstn_rltm_mesure_info> tdw_arpltn_msrstn_rltm_mesure_info_list =  new ArrayList<>();
         //Api api = apiRepository.findOneByTbnm(tb_nm);
-        List<Api> apiList = apiRepository.findAllByTbnm(tb_nm);
+        List<Tn_data_bass_info> Tn_data_bass_infolist = tnDataBassInfoRepository.findAllByInnerClctTblPhysiclNm(tb_nm);
 
-        if(apiList.size() > 0 ){
-            for(int i=0; i<apiList.size(); i++){
+        if(Tn_data_bass_infolist.size() > 0 ){
+            for(int i=0; i<Tn_data_bass_infolist.size(); i++){
                 offset = 1;
                 count = 0;
                 while(true) {
-                    JsonObject result = airKoreaService.getJsonResult(apiList.get(i).getURL(),page,perPage,offset);
+                    JsonObject result = airKoreaService.getJsonResult(Tn_data_bass_infolist.get(i).getData_link_url(),page,perPage,offset);
                     int totalcount = airKoreaService.getTotal(result);
                     JsonArray items = airKoreaService.getItems(result);
 
                     if(items.size() > 0){
                         for(int j=0; j < items.size(); j++ ){
-                            Tdw_arpltn_msrstn_rltm_mesure_info tdw_arpltn_msrstn_rltm_mesure_info = createObject(items.get(j).getAsJsonObject().toString(),Tdw_arpltn_msrstn_rltm_mesure_info.class);
+                            Tdw_arpltn_msrstn_rltm_mesure_info tdw_arpltn_msrstn_rltm_mesure_info = createObject(items.get(j).getAsJsonObject().toString(), Tdw_arpltn_msrstn_rltm_mesure_info.class);
                             tdw_arpltn_msrstn_rltm_mesure_info_list.add(tdw_arpltn_msrstn_rltm_mesure_info);
                             count ++;
                         }
@@ -127,14 +117,14 @@ public class AirKoreaController {
         String todayParameter = airKoreaService.makeDayParameter(inqBginDt,inqEndDt);
         List<Tdw_arpltn_stats_msrstn_rltm_daly_avrg_info> tdw_arpltn_stats_msrstn_rltm_daly_avrg_info_list =  new ArrayList<>();
 
-        List<Api> apiList = apiRepository.findAllByTbnm(tb_nm);
+        List<Tn_data_bass_info> tn_data_bass_infolist = tnDataBassInfoRepository.findAllByInnerClctTblPhysiclNm(tb_nm);
 
-        if(apiList.size() > 0 ){
-            for(int i=0; i<apiList.size(); i++){
+        if(tn_data_bass_infolist.size() > 0 ){
+            for(int i=0; i<tn_data_bass_infolist.size(); i++){
                 offset = 1;
                 count = 0;
                 while(true) {
-                    JsonObject result = airKoreaService.getJsonResult(apiList.get(i).getURL()+todayParameter,page,perPage,offset);
+                    JsonObject result = airKoreaService.getJsonResult(tn_data_bass_infolist.get(i).getData_link_url()+todayParameter,page,perPage,offset);
                     int totalcount = airKoreaService.getTotal(result);
                     JsonArray items = airKoreaService.getItems(result);
 
@@ -172,14 +162,14 @@ public class AirKoreaController {
         String monthParameter = airKoreaService.makeMonthParameter(inqBginMm,inqEndMm);
         List<Tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info> tdw_arpltn_stats_msrstn_rltm_mnby_avrg_info_list =  new ArrayList<>();
 
-        List<Api> apiList = apiRepository.findAllByTbnm(tb_nm);
+        List<Tn_data_bass_info> tn_data_bass_infoList = tnDataBassInfoRepository.findAllByInnerClctTblPhysiclNm(tb_nm);
 
-        if(apiList.size() > 0 ){
-            for(int i=0; i<apiList.size(); i++){
+        if(tn_data_bass_infoList.size() > 0 ){
+            for(int i=0; i<tn_data_bass_infoList.size(); i++){
                 offset = 1;
                 count = 0;
                 while(true) {
-                    JsonObject result = airKoreaService.getJsonResult(apiList.get(i).getURL()+monthParameter,page,perPage,offset);
+                    JsonObject result = airKoreaService.getJsonResult(tn_data_bass_infoList.get(i).getData_link_url()+monthParameter,page,perPage,offset);
                     int totalcount = airKoreaService.getTotal(result);
                     JsonArray items = airKoreaService.getItems(result);
 
@@ -212,10 +202,25 @@ public class AirKoreaController {
 
     }
 
-//    public <T> T getList(String jsonArray, Class<T> clazz){
-//
-//        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
-//        return new Gson().fromJson(jsonArray, typeOfT);
-//    }
+
+    @GetMapping(value = "/common", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<Object> common(@RequestParam(value = "tb_nm") String tb_nm) throws IOException, ClassNotFoundException {
+
+        Class clazz = Class.forName("net.hwj.practice.model." + tb_nm.substring(0, 1).toUpperCase()+tb_nm.substring(1).toLowerCase());
+        log.info(clazz.getCanonicalName());
+        List<Object> classList = new ArrayList<>();
+        Tn_data_bass_info tn_data_bass_info = tnDataBassInfoRepository.findOneByInnerClctTblPhysiclNm(tb_nm);
+        log.info(tn_data_bass_info.getData_link_url());
+        JsonObject result = airKoreaService.getJsonResult(tn_data_bass_info.getData_link_url());
+        JsonArray items = airKoreaService.getItems(result);
+        if (items.size() > 0) {
+            for (int i = 0; i < items.size(); i++) {
+                Object clazzz = createObject(items.get(i).getAsJsonObject().toString(), clazz);
+                classList.add(clazzz);
+            }
+        }
+        return classList;
+    }
+
 
 }
