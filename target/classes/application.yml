@@ -4,7 +4,6 @@ spring:
 
 ---
 
-
 spring:
   profiles:
     active: local
@@ -14,7 +13,7 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.2.121:5432/metisdb
+    url: jdbc:postgresql://192.168.2.105:5432/anyang_test
     username: metis
     password: password
 
@@ -24,18 +23,19 @@ spring:
       ddl-auto: validate
     #  naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     #generate-ddl: true
-    show-sql: false
+    show-sql: true
     properties:
 
       hibernate:
         globally_quoted_identifiers: true
+        globally_quoted_identifiers_skip_column_definitions: true
         format_sql: true
         #default_batch_fetch_size: 10
         type:
           descripter:
             sql: trace
 
-#  flyway:
+    #  flyway:
     #ignore-missing-migrations: true
   thymeleaf:
     cache: false
@@ -48,8 +48,61 @@ logging:
   config: classpath:logback-spring-dev.xml
 
 server:
-  port : 8882
+  port : 8082
 
 app:
   homepage-api:
     url: http://localhost:8082/api
+
+
+---
+#
+#spring:
+#  profiles:
+#    active: dev
+#  server:
+#    tomcat:
+#      max-http-post-size: 10485760
+#
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://192.168.1.242:7531/aydpsys
+#    username: aydpuser
+#    password: aydpusr01!@
+#
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: validate
+#    #  naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+#    #generate-ddl: true
+#    show-sql: false
+#    properties:
+#
+#      hibernate:
+#        globally_quoted_identifiers: true
+#        format_sql: true
+#        #default_batch_fetch_size: 10
+#        type:
+#          descripter:
+#            sql: trace
+#
+#    #  flyway:
+#    #ignore-missing-migrations: true
+#  thymeleaf:
+#    cache: false
+#    check-template: true
+#    check-template-location: true
+#    enabled: true
+#    encoding: UTF-8
+#
+#logging:
+#  config: classpath:logback-spring-dev.xml
+#
+#server:
+#  port : 8882
+#
+#app:
+#  homepage-api:
+#    url: http://localhost:8882/api
+#---

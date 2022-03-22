@@ -3,7 +3,7 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for hwj-Practice" enabled="true">
+      <profile name="Annotation profile for Anyang-Log" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -24,12 +24,14 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.10/lombok-1.18.10.jar" />
         </processorPath>
         <module name="hwj-project" />
+        <module name="anyang_log" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8" />
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="anyang_log" options="-parameters" />
       <module name="hwj-project" options="-parameters" />
     </option>
   </component>

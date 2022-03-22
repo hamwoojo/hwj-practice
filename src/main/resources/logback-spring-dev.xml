@@ -18,9 +18,9 @@
 	</appender>
  
 	<logger name="org.springframework" level="INFO"/>
-	<logger name="net.hwj.practice" level="INFO"/>
+	<logger name="net.anyang" level="INFO"/>
  
-	<root level="INFO">
+		<root level="INFO">
 		<appender-ref ref="dailyRollingFileAppender" />
 	</root>
 </configuration>
